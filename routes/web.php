@@ -8,7 +8,7 @@ use App\Http\Requests\TaskRequest;
 
 Route::get('/', function () {
     return view('index', [
-        'tasks' => Task::latest()->get()
+        'tasks' => Task::latest()->paginate(7)
     ]);
 })->name('tasks.index');
 
@@ -48,6 +48,12 @@ Route::delete('/{task}', function (Task $task){
   return redirect()->route('tasks.index')
   ->with('success', 'Task deleted successfully!');
 })->name('tasks.destroy');
+
+Route::put('{task}/complete', function(Task $task){
+  $task->toggleComplete();
+
+  return redirect()->back()->with('success', 'Task status updated successfully!');
+})->name('tasks.complete');
 
 // Route::get('/about', function () {
 //     return 'About Page';
